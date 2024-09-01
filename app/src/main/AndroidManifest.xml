@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Erabuanaapps">
+
+        <!-- MainActivity remains the launcher activity -->
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:theme="@style/Theme.Erabuanaapps">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- Register LoginActivity -->
+        <activity
+            android:name=".LoginActivity"
+            android:exported="true"
+            android:label="Login"
+            android:theme="@style/Theme.Erabuanaapps">
+        </activity>
+
+        <!-- Register TabsActivity -->
+        <activity
+            android:name=".TabsActivity"
+            android:exported="true"
+            android:label="Tabs"
+            android:theme="@style/Theme.Erabuanaapps">
+        </activity>
+
+        <!-- Register ProfileActivity -->
+        <activity
+            android:name=".ProfileActivity"
+            android:exported="true"
+            android:label="Profile"
+            android:theme="@style/Theme.Erabuanaapps">
+        </activity>
+
+        <!-- Register MyPropertyDetailActivity -->
+        <activity
+            android:name=".MyPropertyDetailActivity"
+            android:exported="true"
+            android:label="Property Detail"
+            android:theme="@style/Theme.Erabuanaapps">
+        </activity>
+
+        <!-- Register NewPropertyActivity -->
+        <activity
+            android:name=".NewPropertyActivity"
+            android:exported="true"
+            android:label="NewProperty"
+            android:theme="@style/Theme.Erabuanaapps">
+        </activity>
+
+        <!-- Register MyTransactionDetailActivity -->
+        <activity
+            android:name=".MyTransactionDetailActivity"
+            android:exported="true"
+            android:label="MyTransactionDetail"
+            android:theme="@style/Theme.Erabuanaapps">
+        </activity>
+
+        <!-- Register NewTransactionActivity -->
+        <activity
+            android:name=".NewTransactionActivity"
+            android:exported="true"
+            android:label="NewTransaction"
+            android:theme="@style/Theme.Erabuanaapps">
+        </activity>
+
+    </application>
+</manifest>
