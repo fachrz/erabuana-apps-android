@@ -3,6 +3,7 @@ package com.jayee.erabuana_apps
 import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -336,35 +337,45 @@ fun NewTransactionScreen(onBack: () -> Unit) {
                 Button(
                     onClick = {
                         coroutineScope.launch {
-                            registerTransaction(
-                                context = context,
-                                buyerName = buyerName,
-                                buyerAddress = buyerAddress,
-                                buyerPhone = buyerPhone,
-                                buyerEmail = buyerEmail,
-                                buyerIdCard = buyerIdCard,
-                                salePrice = salePrice,
-                                paymentMethod = paymentMethod,
-                                downPayment = downPayment,
-                                downPaymentDate = downPaymentDate,
-                                settlementDate = settlementDate,
-                                propertyId = propertyId,
-                                onSuccess = { onBack() },
-                                onValidationError = { errors ->
-                                    // Update error messages based on API response
-                                    buyerNameError = errors.optJSONArray("nama_pembeli")?.join(", ") ?: ""
-                                    buyerAddressError = errors.optJSONArray("alamat_pembeli")?.join(", ") ?: ""
-                                    buyerPhoneError = errors.optJSONArray("telepon_pembeli")?.join(", ") ?: ""
-                                    buyerEmailError = errors.optJSONArray("email_pembeli")?.join(", ") ?: ""
-                                    buyerIdCardError = errors.optJSONArray("ktp_pembeli")?.join(", ") ?: ""
-                                    salePriceError = errors.optJSONArray("harga_jual")?.join(", ") ?: ""
-                                    paymentMethodError = errors.optJSONArray("metode_pembayaran")?.join(", ") ?: ""
-                                    downPaymentError = errors.optJSONArray("uang_tanda_jadi")?.join(", ") ?: ""
-                                    downPaymentDateError = errors.optJSONArray("tanggal_uang_muka")?.join(", ") ?: ""
-                                    settlementDateError = errors.optJSONArray("tanggal_pelunasan")?.join(", ") ?: ""
-                                    propertyIdError = errors.optJSONArray("property_id")?.join(", ") ?: ""
-                                }
-                            )
+                            try {
+                                Log.d("NewTransaction", "Button clicked, starting transaction registration.")
+                                registerTransaction(
+                                    context = context,
+                                    buyerName = buyerName,
+                                    buyerAddress = buyerAddress,
+                                    buyerPhone = buyerPhone,
+                                    buyerEmail = buyerEmail,
+                                    buyerIdCard = buyerIdCard,
+                                    salePrice = salePrice,
+                                    paymentMethod = paymentMethod,
+                                    downPayment = downPayment,
+                                    downPaymentDate = downPaymentDate,
+                                    settlementDate = settlementDate,
+                                    propertyId = propertyId,
+                                    onSuccess = {
+                                        Log.d("NewTransaction", "Transaction registered successfully.")
+                                        onBack()
+                                    },
+                                    onValidationError = { errors ->
+                                        Log.d("NewTransaction", "Validation errors: $errors")
+                                        // Update error messages based on API response
+                                        buyerNameError = errors.optJSONArray("nama_pembeli")?.join(", ") ?: ""
+                                        buyerAddressError = errors.optJSONArray("alamat_pembeli")?.join(", ") ?: ""
+                                        buyerPhoneError = errors.optJSONArray("telepon_pembeli")?.join(", ") ?: ""
+                                        buyerEmailError = errors.optJSONArray("email_pembeli")?.join(", ") ?: ""
+                                        buyerIdCardError = errors.optJSONArray("ktp_pembeli")?.join(", ") ?: ""
+                                        salePriceError = errors.optJSONArray("harga_jual")?.join(", ") ?: ""
+                                        paymentMethodError = errors.optJSONArray("metode_pembayaran")?.join(", ") ?: ""
+                                        downPaymentError = errors.optJSONArray("uang_tanda_jadi")?.join(", ") ?: ""
+                                        downPaymentDateError = errors.optJSONArray("tanggal_uang_muka")?.join(", ") ?: ""
+                                        settlementDateError = errors.optJSONArray("tanggal_pelunasan")?.join(", ") ?: ""
+                                        propertyIdError = errors.optJSONArray("property_id")?.join(", ") ?: ""
+                                    }
+                                )
+                            } catch (e: Exception) {
+                                Log.e("NewTransaction", "Exception during transaction registration: ${e.message}")
+                                Toast.makeText(context, "Error: ${e.message}", Toast.LENGTH_SHORT).show()
+                            }
                         }
                     },
                     colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF007bff)),
@@ -479,15 +490,15 @@ suspend fun registerTransaction(
                 val validationErrors = errorJson.optJSONObject("errors")
 
                 withContext(Dispatchers.Main) {
+                    Toast.makeText(context, errorJson.optString("message", "Failed to register transaction."), Toast.LENGTH_SHORT).show()
                     if (validationErrors != null) {
                         onValidationError(validationErrors)
-                    } else {
-                        Toast.makeText(context, errorJson.optString("message", "Failed to register transaction."), Toast.LENGTH_SHORT).show()
                     }
                 }
             }
         } catch (e: Exception) {
             withContext(Dispatchers.Main) {
+                Log.e("NewTransaction", "Error registering transaction: ${e.message}")
                 Toast.makeText(context, "Error registering transaction: ${e.message}", Toast.LENGTH_SHORT).show()
             }
         }
