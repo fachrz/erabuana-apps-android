@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
@@ -42,7 +43,7 @@ class ProfileActivity : ComponentActivity() {
 
         setContent {
             ErabuanaappsTheme {
-                ProfileContent(onBackPressed = { finish() }) // Handle back press
+                ProfileContent(onBackPressed = { finish() })
             }
         }
     }
@@ -118,8 +119,8 @@ fun ProfileContent(onBackPressed: () -> Unit) {
             ProfileScreen(
                 profile = profile,
                 points = points,
-                onLogout = { handleLogout(context) }, // Handle logout
-                modifier = Modifier.padding(innerPadding) // Apply inner padding to avoid layout issues
+                onLogout = { handleLogout(context) },
+                modifier = Modifier.padding(innerPadding)
             )
         }
     }
@@ -131,21 +132,20 @@ fun ProfileScreen(profile: Profile, points: Int, onLogout: () -> Unit, modifier:
         modifier = modifier
             .fillMaxSize()
             .verticalScroll(rememberScrollState())
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally // Center content horizontally
+            .background(Color.White)
+            .padding(all = 16.dp),
+        verticalArrangement = Arrangement.spacedBy(4.dp)
     ) {
-        // Profile Card with full width and light background color
         Card(
             shape = RoundedCornerShape(12.dp),
             modifier = Modifier
-                .fillMaxWidth() // Full width card
-                .padding(vertical = 16.dp),
+                .fillMaxWidth(),
             elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
             colors = CardDefaults.cardColors(containerColor = Color.White) // Light background color
         ) {
             Column(
-                horizontalAlignment = Alignment.CenterHorizontally, // Center the content inside the card
-                verticalArrangement = Arrangement.Center, // Center content vertically
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center,
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(20.dp)
@@ -178,7 +178,6 @@ fun ProfileScreen(profile: Profile, points: Int, onLogout: () -> Unit, modifier:
             }
         }
 
-        // Logout Button with rectangular shape and rounded corners
         Button(
             onClick = onLogout,
             modifier = Modifier
@@ -233,7 +232,7 @@ private suspend fun fetchPointsFromApi(token: String?): Int {
                 throw Exception("Failed to connect to API")
             }
         } catch (e: Exception) {
-            0 // Return 0 if there is an error
+            0
         }
     }
 }
